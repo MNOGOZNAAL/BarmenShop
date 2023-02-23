@@ -1,0 +1,29 @@
+﻿@using BarmenShop.Models.ViewModels.Basket
+@model BasketViewModel
+
+<div">
+    @if(Model != null)
+    {
+        <div class="mb-4" style="width: 18rem;">
+            <h5 class="card-title">Ваша корзина:</h5>
+            @foreach(var backetItem in Model.Basket.BacketItems)
+            {
+                <div class="card" style="width: 14rem;">
+                    <img class="card-img-top" src="@backetItem.Product.ImageLink" alt="Dish image">
+                    <div class="card-body">
+                    <h5 class="card-title">@backetItem.Product.Name</h5>
+                    <p class="card-text">Количество: @backetItem.Amount</p>
+                    <button class="btn btn-danger removeProduct" custom-attr="@backetItem.Product.Id">Удалить</button>
+                    </div>
+                </div>
+            }
+            <p><b>Итог:</b> @Model.TotalSum</p>
+            <a href="#" class="btn btn-primary makeOrder" custom-attr="@Model.Basket.Id">Оформить заказ</a>
+        </div>
+    }
+    else
+    {
+        <h3>Корзина пуста</h3>
+    }
+</div>
+

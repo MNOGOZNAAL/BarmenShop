@@ -1,0 +1,86 @@
+﻿@using BarmenShop.Models.ViewModels.Category
+@using BarmenShop.Models.ViewModels.Modal
+@model CategoryIndexViewModel
+
+@{
+    ViewBag.Title = "Категории";
+    string hasPreviousPage = Model.PageViewModel.HasPreviousPage ? "btn-outline-dark" : "disabled btn-outline-secondary";
+    string hasNextPage = Model.PageViewModel.HasNextPage ? "btn-outline-dark" : "disabled btn-outline-secondary";
+}
+<a class="btn btn-success" asp-action="Create" asp-controller="Category">Добавить <i class="fa-solid fa-plus"></i></a>
+<div class="table-responsive">
+    <table style="width: 100%; margin-top: 50px"
+           class="table table-striped table-responsive table-hover text-center mt-3 align-middle"
+           attr-page="@Model.PageViewModel.PageNumber">
+        <thead class="table-gray">
+        <tr class="table-primary">
+            <th>
+                Название
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th></th>
+        </tr>
+            @if(Model.Categories == null || Model.Categories.Count == 0)
+            {
+                <tr class="warning no-result">
+                    <td colspan="3"><i class="fa fa-warning"></i> Ничего не найдено</td>
+                </tr>
+            }
+        </thead>
+        <tbody id="info-table">
+        @foreach (var category in Model.Categories)
+        {
+            <tr class="clickable-row my-5">
+                <td class="category-name">
+                    @category.Name
+                </td>
+                <td>@category.CreationDate</td>
+                <td>
+                    <button style="width: 40px; height: 40px;" type="button" class="delete-btn btn btn-danger action-btn mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" custom-attr="@category.Id"><i class="fa-solid fa-trash-can"></i></button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-between align-items-baseline">
+    <div class="mt-5 text-center">
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           class="btn @hasPreviousPage">
+            Назад
+        </a>
+        
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           class="btn @hasNextPage">
+            Вперед
+        </a>
+    </div>
+</div>
+
+@{
+    await Html.RenderPartialAsync("PartialViews/Modal",
+            new ModalViewModel()
+            {
+                Title = "Удаление",
+                Text = "Подтвердите удаление города из списка?",
+                ButtonText = "Удалить"
+            }
+        );
+}
+
+@section Scripts{
+    <script>
+        $("#info-table").on("click",".delete-btn",function (event) {
+            let categoryId = $(this).attr("custom-attr");
+            let categoryName = $(this).closest(".clickable-row").children(".category-name").text();
+            let text = `Подтвердите удаление категории ${categoryName} из списка?`;
+            $(".modal-body").html(text);
+            let deleteUrl = `@Url.Action("Delete", "Category")?id=${categoryId}`;
+            $("#modal-delete-form").attr('action', deleteUrl);
+        });
+    </script>
+}

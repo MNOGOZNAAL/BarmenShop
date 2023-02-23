@@ -1,0 +1,42 @@
+﻿@using BarmenShop.Entites
+@model List<Order>
+
+@{
+    ViewBag.Title = "Мои заказы";
+    Layout = "_Layout";
+}
+
+<div>
+    @if(Model != null && Model.Count > 0)
+    {
+        <h3>Оформленные заказы</h3>
+        <div class="row">
+        @foreach (var order in Model)
+        {
+            <div class="card mx-2 mb-4 col-md-3" style="width: 18rem;">
+              <div class="card-body">
+                  <h3>Дата: @order.CreateDate</h3>
+                    @foreach(var backetItem in order.Basket.BacketItems)
+                    {
+                        <div class="card" style="width: 14rem;">
+                          <img class="card-img-top" src="@backetItem.Product.ImageLink" alt="Product image">
+                          <div class="card-body">
+                            <h5 class="card-title">@backetItem.Product.Name</h5>
+                            <p class="card-text">Количество: @backetItem.Amount</p>
+                          </div>
+                        </div>
+                    }
+                    <p><b>Email:</b> @order.User.Email</p>
+                    <p><b>Контакты:</b> @order.Contasts</p>
+                    <p><b>Адрес:</b> @order.Address</p>
+                    <p><b>Итог:</b> @order.TotalSum</p>
+              </div>
+            </div>
+        }
+        </div>
+    }
+    else
+    {
+        <h3>У вас нет заказов</h3>
+    }
+</div>

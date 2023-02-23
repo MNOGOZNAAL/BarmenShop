@@ -1,0 +1,200 @@
+﻿@using BarmenShop.Entites
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> _userManager;
+@{
+    var user = await _userManager.GetUserAsync(User);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BarmenShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BarmenShop.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Product" asp-action="Index">BarmenShop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            @if(User.IsInRole("admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Create">Создать товар</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Категории</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Order" asp-action="AllOrders">Все заказы</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Все товары</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Order" asp-action="Index">Ваши заказы</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="d-flex">
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-success" id="openBasket">Корзина</button>
+                            @if(@user != null)
+                            {
+                                <p class="mx-3">Login: @user.UserName</p>
+                            }
+                            <form method="post" asp-controller="Account" asp-action="LogOut">
+                                <input class="btn btn-danger" type="submit" value="Выход" />
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Войти</a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Зарегистрироваться</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Корзина</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body" style="margin: 0 auto;">
+        
+      </div>
+    </div>
+
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Оформление заказа</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Контактные данные</span>
+                      </div>
+                      <input id="contactData" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Адрес доставки</span>
+                      </div>
+                      <input id="address" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div id="serverAnswer">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button id="makeOrderBtn" type="button" class="btn btn-primary">Оформить заказ</button>
+                </div>
+            </div>
+         </div>
+     </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - BarmenShop
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $("#openBasket").on("click", function (event) {
+            console.log("buttonPressed");
+            const bsOffcanvas = new bootstrap.Offcanvas('#offcanvasRight');
+            $('.offcanvas-body').load(`@Url.Action("MyBasket","Basket")`);
+            bsOffcanvas.show();
+        });
+
+        $(".offcanvas-body").on("click",".removeProduct",function (event) {
+            let productId = $(this).attr("custom-attr");
+            let myUrl = '@Url.Action("RemoveProduct","Basket")';
+
+            $.ajax({
+                type: "POST",
+                url: myUrl,
+                data: {productId : productId},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('.offcanvas-body').load(`@Url.Action("MyBasket","Basket")`);
+                },
+                error: function (er) {
+                    console.log("Busket remove error");
+                    console.log(er);
+                }
+            });
+        });
+
+        $("#makeOrderBtn").on("click",function (event) {
+            let basketId = $(this).attr("custom-attr");
+            let myUrl = '@Url.Action("Create","Order")';
+            let contacts = $("#contactData").val();
+            let address = $("#address").val();
+
+            $.ajax({
+                type: "POST",
+                url: myUrl,
+                data: {basketId : basketId, address : address, contacts : contacts},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if(data.value.success == true)
+                    {
+                        setTimeout(function() {
+                          $('#orderModal').modal('hide');
+                        }, 1000);
+                        $("#serverAnswer").html(`<h4 class="text-success">${data.value.message}</h4>`);
+                        $('.offcanvas-body').load(`@Url.Action("MyBasket","Basket")`);
+                    }
+                    else
+                    {
+                        $("#serverAnswer").html(`<h4 class="text-danger">${data.value.message}</h4>`);
+                    }
+                },
+                error: function (er) {
+                    console.log("Order error");
+                    console.log(er);
+                }
+            });
+        });
+        
+        $(".offcanvas-body").on("click",".makeOrder",function (event) {
+            let basketId = $(this).attr("custom-attr");
+            $("#makeOrderBtn").attr("custom-attr",basketId);
+            $('#orderModal').modal('show');
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

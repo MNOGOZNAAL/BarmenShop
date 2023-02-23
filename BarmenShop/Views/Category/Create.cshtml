@@ -1,0 +1,19 @@
+﻿@using BarmenShop.Models.ViewModels.Category
+@model CategoryCreateViewModel
+
+@{
+    ViewBag.Title = "Создать категорию";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h2>Создание категории</h2>
+    <form asp-action="Create" asp-controller="Category" method="post">
+        <div class="form-group">
+            <label for="name">Название</label>
+            <input asp-for="Name" type="text" class="form-control" id="name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button class="btn btn-warning mt-4" type="submit">Добавить</button>
+    </form>
+</div>
