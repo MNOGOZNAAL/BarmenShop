@@ -133,6 +133,15 @@
                       </div>
                       <input id="address" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
                     </div>
+                    <div class="input-group mb-3">
+                        <div class="form-group">
+                            <label for="payment">Оплата</label>
+                            <select id="payment" class="form-select">
+                                <option value="0">При доставке</option>
+                                <option value="1">На каспи</option>
+                            </select>
+                        </div>
+                    </div>
                     <div id="serverAnswer">
 
                     </div>
@@ -195,11 +204,11 @@
             let myUrl = '@Url.Action("Create","Order")';
             let contacts = $("#contactData").val();
             let address = $("#address").val();
-
+            let payment = $("#payment").find(":selected").val();
             $.ajax({
                 type: "POST",
                 url: myUrl,
-                data: {basketId : basketId, address : address, contacts : contacts},
+                data: {basketId : basketId, address : address, contacts : contacts, payment : payment},
                 dataType: "json",
                 success: function (data) {
                     console.log(data);

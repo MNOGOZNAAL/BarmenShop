@@ -69,6 +69,7 @@ namespace BarmenShop.Services
                 Address = model.Address,
                 Contasts = model.Contacts,
                 CreateDate = DateTime.Now,
+                Payment = model.Payment,
             };
 
             await _orderRepository.CreateAsync(order);

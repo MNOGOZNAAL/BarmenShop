@@ -10,6 +10,7 @@
         public decimal TotalSum { get; set; }
         public string Address { get; set; }
         public string Contasts { get; set; }
+        public int Payment { get; set; }
         public DateTime CreateDate { get; set; }
     }
 }

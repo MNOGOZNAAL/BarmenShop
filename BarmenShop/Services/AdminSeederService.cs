@@ -9,7 +9,7 @@ namespace BarmenShop.Services
         {
             string adminLogin = "admin";
             string adminPassword = "adminpass";
-
+            string adminEmail = "admin@email.kz";
             var roles = new[] { "admin", "user" };
 
             foreach (var role in roles)
@@ -25,6 +25,7 @@ namespace BarmenShop.Services
                 {
                     UserName = adminLogin,
                     RegDate = DateTime.Now,
+                    Email = adminEmail,
                 };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (result.Succeeded)

@@ -29,6 +29,7 @@
                     <p><b>Email:</b> @order.User.Email</p>
                     <p><b>Контакты:</b> @order.Contasts</p>
                     <p><b>Адрес:</b> @order.Address</p>
+                    <p><b>Оплата:</b> @(order.Payment == 0 ? "При доставке" : "На каспи")</p>
                     <p><b>Итог:</b> @order.TotalSum</p>
               </div>
             </div>
