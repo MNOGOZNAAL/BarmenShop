@@ -30,6 +30,7 @@ namespace BarmenShop.Services
             {
                 UserName = model.Login,
                 RegDate = DateTime.Now,
+                Email = model.Email,
             };
             var result = await _userManager.CreateAsync(user, model.Password);
 

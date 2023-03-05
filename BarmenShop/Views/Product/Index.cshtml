@@ -31,24 +31,11 @@
                 }
             </select>
         </form>
-        <div class="col-md-4 position-relative">
-                <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 100px;" data-delay="1000">
-                <div class="toast" style="position: absolute; top: 0; right: 0;">
-                <div class="toast-header">
-                    <img src="https://cdn.icon-icons.com/icons2/1465/PNG/512/756exclamationmark_100528.png" style="width:20px; height:20px;" class="rounded mr-2" alt="...">
-                    <strong class="mr-auto toast-title">Добавление</strong>
-                </div>
-                <div class="toast-body">
-                    Message
-                </div>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="card-deck row">
+    <div class="card-deck row mt-3">
         @foreach (var product in Model.Products)
         {
-            <div class="card col-md-4">
+            <div class="card col-md-3">
                 <img class="card-img-top" src="@product.ImageLink" alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title">@product.Name</h5>
@@ -56,11 +43,10 @@
                   <p class="card-text">Цена: @product.Price</p>
                   <p class="card-text">Описание: @product.Description</p>
                   <div class="d-flex">
-                        @*<a class="btn btn-primary" asp-action="Details" asp-route-id="@product.Id">Подробнее</a>*@
                         <button class="btn btn-success busket-add" custom-attr="@product.Id">В корзину</button>
                         @if (User.IsInRole("admin"))
                         {
-                            <a class="btn btn-primary" asp-action="Update" asp-route-id="@product.Id">Редактировать</a>
+                            <a class="btn btn-primary" asp-action="Update" asp-route-id="@product.Id"><i class="fas fa-edit"></i></a>
                             <button style="width: 40px; height: 40px;" type="button" class="delete-btn btn btn-danger action-btn mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal" custom-attr="@product.Id"><i class="fa-solid fa-trash-can"></i></button>
                         }
                   </div>
@@ -119,15 +105,12 @@
                     console.log(data);
                     if(data.value.success === true)
                     {
-                        $(".toast-body").html(data.value.message);
-                        $(".toast-title").html("<p class='text-success'>Корзина</p>");
+                        notify(data.value.message);
                     }
                     else
                     {
-                        $(".toast-body").html(data.value.message);
-                        $(".toast-title").html("<p class='text-danger'>Корзина</p>");
+                        notify(data.value.message);
                     }
-                    $('.toast').toast('show');
                 },
                 error: function (er) {
                     console.log("Busket add error");

@@ -13,6 +13,11 @@
     <div class="container">
         <form method="post" asp-controller="Account" asp-action="Register" enctype="multipart/form-data">
             <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input asp-for="Email" type="text" class="form-control" id="inputEmail" placeholder="Email">
+                <span asp-validation-for="Email" class="form-text text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label for="inputUsername">Логин</label>
                 <input asp-for="Login" type="text" class="form-control" id="inputUsername" placeholder="Логин">
                 <span asp-validation-for="Login" class="form-text text-danger"></span>

@@ -75,5 +75,12 @@ namespace BarmenShop.Controllers
             await _productService.Remove(id);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> FindBy(string text)
+        {
+            ProductIndexViewModel model = await _productService.FindBy(text);
+            return View("Index",model);
+        }
     }
 }

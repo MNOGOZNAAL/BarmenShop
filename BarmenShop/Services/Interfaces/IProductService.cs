@@ -10,5 +10,6 @@ namespace BarmenShop.Services.Interfaces
         Task<ProductIndexViewModel> GetAllAsync(int page, int? categoryId, int pageSize = 12);
         ProductDetailsViewModel GetDetailsModel(int id);
         ProductUpdateViewModel GetUpdateModel(int id);
+        Task<ProductIndexViewModel> FindBy(string text);
     }
 }

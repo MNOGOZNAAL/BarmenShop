@@ -117,5 +117,22 @@ namespace BarmenShop.Services
                 Price = product.Price
             };
         }
+
+        public async Task<ProductIndexViewModel> FindBy(string text)
+        {
+            List<Product> products = await _productRepository.GetAll().Where(x =>
+            x.Name.ToLower().Contains(text.ToLower()) || 
+            x.Category.Name.ToLower().Contains(text.ToLower()) || 
+            x.Description.ToLower().Contains(text.ToLower())).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(products.Count, 1, 12);
+
+            ProductIndexViewModel model = new ProductIndexViewModel
+            {
+                Products = products,
+                PageViewModel = pageViewModel,
+            };
+            return model;
+        }
     }
 }
