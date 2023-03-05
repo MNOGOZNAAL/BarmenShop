@@ -12,7 +12,7 @@ const notify = (response) => {
             <button id="close-alert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`
         } else {
-            wrapper.innerHTML = `<div class="alert alert-danger d-flex align-items-center fade show alert-dismissible" role="alert" id="alert">
+            wrapper.innerHTML = `<div class="alert alert-success d-flex align-items-center fade show alert-dismissible" role="alert" id="alert">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                 <div class="text-center mx-auto">
                 ${response}
